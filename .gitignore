@@ -1,7 +1,9 @@
 venv/
 __pycache__/
-uploads/
-snapdrive.db
 .vscode/
+uploads/
+.tmp.driveupload/
+.tmp.drivedownload/
+snapdrive.db
 *.pyc
 .env
