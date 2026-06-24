@@ -11,7 +11,7 @@ from activity_service import log_activity
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="SnapDrive - Anuj Python Automation Module",
+    title="File Manager - File Explorer",
     description="File upload, download, search, storage tracking, and activity logging module",
     version="1.0.0"
 )
