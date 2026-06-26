@@ -1,27 +1,28 @@
-from sqlalchemy import create_engine #CREATE ENGINE MAKE THE CONNECTION BETWEEN DATABASE AND PYTHON IMPORT FROM SQLALCHEMY
-from sqlalchemy.orm import sessionmaker, declarative_base # SESSIONMAKER = CREATE SESSION, SESSION CONVERSATION B/W DATABASE 
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, declarative_base
 
-DATABASE_URL = "sqlite:///./snapdrive.db" # TELL SQLALCHEMY WHERE THE DATABASE IS 
+# SQLite database
+DATABASE_URL = "sqlite:///./snapdrive.db"
 
+# Create database engine
 engine = create_engine(
     DATABASE_URL,
-    connect_args={"check_same_thread": False} # ALLOW FASTAPI TO USE DTATBASE SAFELY, ALLOW MULTI THREADS
+    connect_args={"check_same_thread": False}
 )
 
+# Create database session
 SessionLocal = sessionmaker(
-    # CRAETE SESSION
-
-    autocommit=False, #DB DO NOT SAVE AUTOMATICALLY
-    
-    autoflush=False,# DO NOT AUTOMATICALLY PUSH CHANGES
-    
-    bind=engine #USE ENGIN THAT CONNECT TO FOLDER
+    autocommit=False,
+    autoflush=False,
+    bind=engine
 )
 
-Base = declarative_base()# CREATE PARENT CLASS FOR DATABASE TABLE
+# Base class for all database models
+Base = declarative_base()
 
 
-def get_db(): # PROVIDE DATABASE CONNECTION TO API'S
+# Dependency used in FastAPI
+def get_db():
     db = SessionLocal()
     try:
         yield db

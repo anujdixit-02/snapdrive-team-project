@@ -8,22 +8,40 @@ from file_service import upload_file_service, search_files_service, get_file_by_
 from storage_service import get_storage_details
 from activity_service import log_activity
 
+# Authentication Router
+from auth_routes import router as auth_router
+
+# Create all database tables
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="File Manager - File Explorer",
-    description="File upload, download, search, storage tracking, and activity logging module",
+    title="SnapDrive Backend API",
+    description="Authentication, File Upload, Download, Search, Storage Tracking and Activity Logging",
     version="1.0.0"
 )
+
+# Register Authentication APIs
+app.include_router(auth_router)
 
 
 @app.get("/")
 def home():
     return {
-        "message": "SnapDrive Python Automation Module is running"
+        "message": "SnapDrive Backend API is running successfully!",
+        "modules": [
+            "Authentication",
+            "File Upload",
+            "File Download",
+            "File Search",
+            "Storage Tracking",
+            "Activity Logging"
+        ]
     }
 
 
+# -----------------------------
+# FILE UPLOAD
+# -----------------------------
 @app.post("/files/upload")
 async def upload_file(
     user_id: int,
@@ -45,6 +63,9 @@ async def upload_file(
     }
 
 
+# -----------------------------
+# DOWNLOAD FILE
+# -----------------------------
 @app.get("/files/{file_id}/download")
 def download_file(
     file_id: int,
@@ -68,6 +89,9 @@ def download_file(
     )
 
 
+# -----------------------------
+# SEARCH FILES
+# -----------------------------
 @app.get("/files/search")
 def search_files(
     user_id: int,
@@ -92,6 +116,9 @@ def search_files(
     }
 
 
+# -----------------------------
+# STORAGE USAGE
+# -----------------------------
 @app.get("/storage/usage")
 def storage_usage(
     user_id: int,
@@ -100,6 +127,9 @@ def storage_usage(
     return get_storage_details(db, user_id)
 
 
+# -----------------------------
+# ACTIVITY LOGS
+# -----------------------------
 @app.get("/activity/logs")
 def activity_logs(
     user_id: int,
@@ -124,6 +154,9 @@ def activity_logs(
     }
 
 
+# -----------------------------
+# DELETE FILE
+# -----------------------------
 @app.delete("/files/{file_id}")
 def delete_file(
     file_id: int,
@@ -146,4 +179,4 @@ def delete_file(
     return {
         "message": "File deleted successfully",
         "file_id": file_id
-    } 
+    }
