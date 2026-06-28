@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | SnapDrive</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            background: #F8FAFC;
+            overflow: hidden;
+        }
+
+        /* ===== LEFT BRANDING PANEL ===== */
+        .auth-branding {
+            flex: 1;
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-branding::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            top: -100px;
+            right: -100px;
+            border-radius: 50%;
+        }
+
+        .auth-branding::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+            bottom: -80px;
+            left: -80px;
+            border-radius: 50%;
+        }
+
+        .branding-content {
+            position: relative;
+            z-index: 2;
+            max-width: 480px;
+            text-align: center;
+        }
+
+        .branding-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 40px;
+        }
+
+        .branding-logo img {
+            width: 52px;
+            height: 52px;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+
+        .branding-logo h1 {
+            font-size: 32px;
+            font-weight: 800;
+            color: #FFFFFF;
+            letter-spacing: -0.03em;
+        }
+
+        .branding-tagline {
+            font-size: 38px;
+            font-weight: 800;
+            color: #FFFFFF;
+            line-height: 1.2;
+            letter-spacing: -0.03em;
+            margin-bottom: 16px;
+        }
+
+        .branding-tagline span {
+            background: linear-gradient(135deg, #60A5FA, #818CF8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .branding-desc {
+            font-size: 16px;
+            color: #94A3B8;
+            line-height: 1.7;
+            margin-bottom: 48px;
+        }
+
+        .branding-features {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            text-align: left;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .feature-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .feature-icon.blue { background: rgba(59, 130, 246, 0.15); color: #60A5FA; }
+        .feature-icon.green { background: rgba(16, 185, 129, 0.15); color: #34D399; }
+        .feature-icon.purple { background: rgba(139, 92, 246, 0.15); color: #A78BFA; }
+
+        .feature-text h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #F1F5F9;
+            margin-bottom: 2px;
+        }
+
+        .feature-text p {
+            font-size: 13px;
+            color: #64748B;
+        }
+
+        /* ===== RIGHT FORM PANEL ===== */
+        .auth-form-panel {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            background: #FFFFFF;
+            position: relative;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .auth-card-header {
+            margin-bottom: 36px;
+        }
+
+        .auth-card-header .mobile-logo {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+
+        .auth-card-header .mobile-logo img {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+        }
+
+        .auth-card-header .mobile-logo span {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0F172A;
+        }
+
+        .auth-card-header h2 {
+            font-size: 30px;
+            font-weight: 800;
+            color: #0F172A;
+            letter-spacing: -0.03em;
+            margin-bottom: 8px;
+        }
+
+        .auth-card-header p {
+            font-size: 15px;
+            color: #64748B;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid #E2E8F0;
+            border-radius: 12px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 15px;
+            color: #0F172A;
+            transition: all 0.2s ease;
+            background: #F8FAFC;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #3B82F6;
+            background: #FFFFFF;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.08);
+        }
+
+        .form-input::placeholder {
+            color: #94A3B8;
+        }
+
+        .password-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .password-header .form-label {
+            margin-bottom: 0;
+        }
+
+        .forgot-link {
+            font-size: 13px;
+            color: #3B82F6;
+            font-weight: 700;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .forgot-link:hover { color: #1D4ED8; }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            color: #FFFFFF;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 8px;
+            box-shadow: 0 4px 14px -3px rgba(59, 130, 246, 0.5);
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px -4px rgba(59, 130, 246, 0.5);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .auth-footer {
+            margin-top: 32px;
+            text-align: center;
+            font-size: 14px;
+            color: #64748B;
+        }
+
+        .auth-footer a {
+            color: #3B82F6;
+            font-weight: 800;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .auth-footer a:hover { color: #1D4ED8; }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 28px 0;
+            color: #94A3B8;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #E2E8F0;
+        }
+
+        .trust-badges {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid #F1F5F9;
+        }
+
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #94A3B8;
+            font-weight: 600;
+        }
+
+        .trust-badge svg { color: #10B981; }
+
+        /* ===== FLOATING SHAPES (decoration) ===== */
+        .floating-shape {
+            position: absolute;
+            border-radius: 20px;
+            opacity: 0.05;
+            background: #3B82F6;
+        }
+
+        .shape-1 { width: 120px; height: 120px; top: 10%; right: 8%; transform: rotate(15deg); animation: float 6s ease-in-out infinite; }
+        .shape-2 { width: 80px; height: 80px; bottom: 15%; left: 5%; transform: rotate(-20deg); animation: float 8s ease-in-out infinite reverse; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(15deg); }
+            50% { transform: translateY(-20px) rotate(20deg); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            body { flex-direction: column; overflow: auto; }
+            .auth-branding { display: none; }
+            .auth-form-panel { padding: 32px 24px; }
+            .auth-card-header .mobile-logo { display: flex; }
+        }
+
+        @media (max-width: 480px) {
+            .auth-form-panel {
+                padding: 24px 16px;
+            }
+
+            .auth-card-header h2 {
+                font-size: 24px;
+            }
+
+            .auth-card-header p {
+                font-size: 14px;
+            }
+
+            .form-input {
+                padding: 12px 14px;
+                font-size: 14px;
+            }
+
+            .submit-btn {
+                padding: 13px;
+                font-size: 15px;
+            }
+
+            .trust-badges {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .trust-badge {
+                font-size: 11px;
+            }
+
+            .forgot-link {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LEFT: BRANDING PANEL -->
+    <div class="auth-branding">
+        <div class="branding-content">
+            <div class="branding-logo">
+                <img src="assets/logo.png" alt="SnapDrive Logo">
+                <h1>SnapDrive</h1>
+            </div>
+
+            <div class="branding-tagline">
+                Your files,<br><span>always within reach.</span>
+            </div>
+
+            <p class="branding-desc">
+                Store, share, and access your documents from anywhere. 
+                SnapDrive gives you 10 GB of free cloud storage with enterprise-grade security.
+            </p>
+
+            <div class="branding-features">
+                <div class="feature-item">
+                    <div class="feature-icon blue">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                    </div>
+                    <div class="feature-text">
+                        <h4>Instant Upload</h4>
+                        <p>Drag, drop, and done — upload files in seconds</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon green">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+                    </div>
+                    <div class="feature-text">
+                        <h4>Easy Sharing</h4>
+                        <p>Share files with teammates in one click</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon purple">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                    </div>
+                    <div class="feature-text">
+                        <h4>Secure Storage</h4>
+                        <p>Your data stays safe with encrypted storage</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT: LOGIN FORM -->
+    <div class="auth-form-panel">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+
+        <div class="auth-card">
+            <div class="auth-card-header">
+                <div class="mobile-logo">
+                    <img src="assets/logo.png" alt="SnapDrive">
+                    <span>SnapDrive</span>
+                </div>
+                <h2>Welcome back 👋</h2>
+                <p>Enter your credentials to access your cloud storage and manage your files.</p>
+            </div>
+
+            <form onsubmit="event.preventDefault(); login();">
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" id="email" class="form-input" placeholder="you@example.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <div class="password-header">
+                        <label class="form-label">Password</label>
+                        <a href="#" class="forgot-link" onclick="event.preventDefault(); openForgotPasswordModal()">Forgot password?</a>
+                    </div>
+                    <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
+                </div>
+
+                <button type="submit" id="loginBtn" class="submit-btn">
+                    <span id="btnText">Sign In</span>
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                Don't have an account? <a href="register.html">Sign Up</a>
+            </div>
+
+            <div class="trust-badges">
+                <div class="trust-badge">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    10 GB Free
+                </div>
+                <div class="trust-badge">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    No Credit Card
+                </div>
+                <div class="trust-badge">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    Encrypted
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.5); backdrop-filter:blur(4px); z-index:1000; align-items:center; justify-content:center;">
+        <div style="background:#FFFFFF; border-radius:18px; width:100%; max-width:440px; padding:32px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.25); position:relative;">
+            <button onclick="closeForgotPasswordModal()" style="position:absolute; top:16px; right:16px; background:none; border:none; cursor:pointer; font-size:20px; color:#94A3B8; line-height:1;">✕</button>
+            
+            <div style="text-align:center; margin-bottom:28px;">
+                <div style="width:56px; height:56px; border-radius:16px; background:rgba(59,130,246,0.1); display:flex; align-items:center; justify-content:center; margin:0 auto 16px;">
+                    <svg width="28" height="28" fill="none" stroke="#3B82F6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+                </div>
+                <h2 style="font-size:24px; font-weight:800; color:#0F172A; margin-bottom:6px;">Reset Password</h2>
+                <p style="font-size:14px; color:#64748B;">Enter your email and set a new password</p>
+            </div>
+
+            <form onsubmit="event.preventDefault(); forgotPassword();">
+                <div style="margin-bottom:18px;">
+                    <label style="display:block; font-size:13px; font-weight:700; color:#334155; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.04em;">Email Address</label>
+                    <input type="email" id="forgotEmail" placeholder="you@example.com" required style="width:100%; padding:14px 16px; border:1.5px solid #E2E8F0; border-radius:12px; font-family:'Plus Jakarta Sans',sans-serif; font-size:15px; color:#0F172A; background:#F8FAFC; outline:none; transition:all 0.2s;">
+                </div>
+                <div style="margin-bottom:18px;">
+                    <label style="display:block; font-size:13px; font-weight:700; color:#334155; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.04em;">New Password</label>
+                    <input type="password" id="forgotNewPassword" placeholder="Enter new password" required minlength="6" style="width:100%; padding:14px 16px; border:1.5px solid #E2E8F0; border-radius:12px; font-family:'Plus Jakarta Sans',sans-serif; font-size:15px; color:#0F172A; background:#F8FAFC; outline:none; transition:all 0.2s;">
+                </div>
+                <div style="margin-bottom:24px;">
+                    <label style="display:block; font-size:13px; font-weight:700; color:#334155; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.04em;">Confirm Password</label>
+                    <input type="password" id="forgotConfirmPassword" placeholder="Confirm new password" required minlength="6" style="width:100%; padding:14px 16px; border:1.5px solid #E2E8F0; border-radius:12px; font-family:'Plus Jakarta Sans',sans-serif; font-size:15px; color:#0F172A; background:#F8FAFC; outline:none; transition:all 0.2s;">
+                </div>
+                <button type="submit" id="forgotBtn" style="width:100%; padding:15px; border:none; border-radius:12px; background:linear-gradient(135deg,#3B82F6,#2563EB); color:#FFFFFF; font-family:'Plus Jakarta Sans',sans-serif; font-size:16px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 4px 14px -3px rgba(59,130,246,0.5); transition:all 0.3s;">
+                    <span id="forgotBtnText">Reset Password</span>
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                </button>
+            </form>
+
+            <div style="text-align:center; margin-top:20px;">
+                <a href="#" onclick="event.preventDefault(); closeForgotPasswordModal()" style="font-size:14px; color:#3B82F6; font-weight:700; text-decoration:none;">← Back to Sign In</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="toastContainer" style="position:fixed; bottom:24px; right:24px; z-index:2000;"></div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        if (localStorage.getItem('token')) {
+            window.location.href = 'dashboard.html';
+        }
+
+        function openForgotPasswordModal() {
+            document.getElementById('forgotPasswordModal').style.display = 'flex';
+            document.getElementById('forgotEmail').value = document.getElementById('email').value || '';
+            document.getElementById('forgotNewPassword').value = '';
+            document.getElementById('forgotConfirmPassword').value = '';
+            setTimeout(() => { document.getElementById('forgotEmail').focus(); }, 100);
+        }
+
+        function closeForgotPasswordModal() {
+            document.getElementById('forgotPasswordModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
+ 

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapDrive | Secure Cloud Storage</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .hero-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 20px;
+            background: radial-gradient(circle at top right, #EEF2FF, #F8FAFC);
+        }
+        .hero-logo {
+            width: 64px;
+            height: 64px;
+            background: #3B82F6;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.4);
+        }
+        .hero-h1 {
+            font-size: 56px;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            margin-bottom: 16px;
+            color: #0F172A;
+        }
+        .hero-p {
+            font-size: 18px;
+            color: #64748B;
+            max-width: 600px;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+        .btn-large {
+            padding: 14px 32px;
+            font-size: 16px;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .hero-h1 {
+                font-size: 36px;
+            }
+            .hero-p {
+                font-size: 16px;
+                padding: 0 16px;
+            }
+            .hero-logo {
+                width: 56px;
+                height: 56px;
+            }
+            .btn-large {
+                padding: 12px 24px;
+                font-size: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-h1 {
+                font-size: 28px;
+            }
+            .hero-p {
+                font-size: 14px;
+            }
+            .hero-buttons {
+                flex-direction: column;
+                width: 100%;
+                padding: 0 24px;
+            }
+            .hero-buttons a {
+                text-align: center;
+            }
+            .btn-large {
+                padding: 14px 20px;
+                font-size: 15px;
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-section">
+        <div class="hero-logo" style="background: none; box-shadow: none; overflow: hidden; width: 80px; height: 80px;">
+            <img src="assets/logo.png" alt="SnapDrive" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <h1 class="hero-h1">Welcome to SnapDrive</h1>
+        <p class="hero-p">The most secure and intuitive cloud storage for teams and individuals. Store, share, and collaborate on your files from anywhere.</p>
+        
+        <div class="hero-buttons">
+            <a href="login.html" class="btn btn-primary btn-large" style="text-decoration: none;">Get Started</a>
+            <a href="register.html" class="btn btn-outline btn-large" style="text-decoration: none;">Create Account</a>
+        </div>
+    </div>
+
+    <script>
+        if (localStorage.getItem("token")) {
+            window.location.href = "dashboard.html";
+        }
+    </script>
+</body>
+</html>
+ 

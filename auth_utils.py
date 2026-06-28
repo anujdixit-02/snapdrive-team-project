@@ -3,6 +3,15 @@ from datetime import datetime, timedelta, timezone
 
 from dotenv import load_dotenv
 from jose import JWTError, jwt
+
+# Patch bcrypt to prevent passlib AttributeError on Python 3.12+ (Vercel)
+try:
+    import bcrypt
+    if not hasattr(bcrypt, "__about__"):
+        bcrypt.__about__ = type("About", (object,), {"__version__": bcrypt.__version__})
+except ImportError:
+    pass
+
 from passlib.context import CryptContext
 
 
@@ -15,10 +24,7 @@ load_dotenv()
 # -----------------------------
 # SECURITY CONFIGURATION
 # -----------------------------
-SECRET_KEY = os.getenv("SECRET_KEY")
-
-if not SECRET_KEY:
-    raise ValueError("SECRET_KEY is missing in the .env file")
+SECRET_KEY = os.getenv("SECRET_KEY", "default-fallback-secret-key-snapdrive-12345")
 
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
 
@@ -99,3 +105,4 @@ def verify_access_token(token: str):
 
     except JWTError:
         return None
+ 
