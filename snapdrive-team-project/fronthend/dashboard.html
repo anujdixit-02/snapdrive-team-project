@@ -1,0 +1,4875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>SnapDrive - Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+        /* =========================================================
+           ROOT / THEME
+        ========================================================= */
+
+        :root {
+            --bg: #0b0f19;
+            --bg-secondary: #111827;
+            --card: #151c2b;
+            --card-hover: #1b2435;
+
+            --sidebar: #0d1320;
+            --border: rgba(255,255,255,0.08);
+
+            --text: #f8fafc;
+            --text-secondary: #a7b0c0;
+            --muted: #737d90;
+
+            --primary: #6d5dfc;
+            --primary-hover: #5a4af0;
+
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+
+            --shadow:
+                0 10px 30px rgba(0,0,0,0.25);
+
+            --radius: 16px;
+            --radius-sm: 10px;
+
+            --input-bg: #0f1624;
+        }
+
+        html[data-theme="light"] {
+            --bg: #f5f7fb;
+            --bg-secondary: #ffffff;
+            --card: #ffffff;
+            --card-hover: #f8fafc;
+
+            --sidebar: #ffffff;
+            --border: rgba(15,23,42,0.10);
+
+            --text: #111827;
+            --text-secondary: #596579;
+            --muted: #7b8494;
+
+            --input-bg: #f8fafc;
+
+            --shadow:
+                0 10px 30px rgba(15,23,42,0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            transition:
+                background 0.25s ease,
+                color 0.25s ease;
+        }
+
+        button,
+        input,
+        select {
+            font-family: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* =========================================================
+           LAYOUT
+        ========================================================= */
+
+        .app {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* =========================================================
+           SIDEBAR
+        ========================================================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+
+            width: 260px;
+
+            background: var(--sidebar);
+            border-right: 1px solid var(--border);
+
+            padding: 24px 16px;
+
+            display: flex;
+            flex-direction: column;
+
+            z-index: 1000;
+
+            transition:
+                transform 0.25s ease,
+                background 0.25s ease;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            padding: 4px 10px 28px;
+        }
+
+        .brand-logo {
+            width: 42px;
+            height: 42px;
+
+            border-radius: 12px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    #8b5cf6
+                );
+
+            color: white;
+            font-size: 20px;
+            font-weight: 800;
+
+            box-shadow:
+                0 8px 25px rgba(109,93,252,0.35);
+        }
+
+        .brand-text h2 {
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .brand-text span {
+            display: block;
+
+            margin-top: 3px;
+
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .nav-title {
+            padding: 12px 12px 8px;
+
+            font-size: 11px;
+            font-weight: 700;
+
+            color: var(--muted);
+
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .nav-item {
+            width: 100%;
+
+            border: 0;
+            background: transparent;
+
+            color: var(--text-secondary);
+
+            padding: 12px 13px;
+
+            border-radius: 11px;
+
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            text-align: left;
+
+            transition: 0.2s ease;
+        }
+
+        .nav-item:hover {
+            background: var(--card-hover);
+            color: var(--text);
+        }
+
+        .nav-item.active {
+            background: rgba(109,93,252,0.14);
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+            font-size: 17px;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+
+            min-width: 20px;
+            height: 20px;
+
+            padding: 0 6px;
+
+            border-radius: 999px;
+
+            background: var(--danger);
+            color: white;
+
+            display: none;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+        }
+
+        .storage-mini {
+            padding: 15px;
+
+            background: var(--card);
+            border: 1px solid var(--border);
+
+            border-radius: 14px;
+
+            margin-bottom: 12px;
+        }
+
+        .storage-mini-header {
+            display: flex;
+            justify-content: space-between;
+
+            margin-bottom: 10px;
+
+            font-size: 12px;
+        }
+
+        .storage-mini-header span:last-child {
+            color: var(--text-secondary);
+        }
+
+        .progress {
+            height: 7px;
+
+            background: var(--border);
+
+            border-radius: 999px;
+
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+
+            width: 0%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--primary),
+                    #8b5cf6
+                );
+
+            border-radius: inherit;
+
+            transition: width 0.4s ease;
+        }
+
+        .logout-btn {
+            width: 100%;
+
+            border: 0;
+
+            background: transparent;
+
+            color: var(--danger);
+
+            padding: 11px 13px;
+
+            border-radius: 10px;
+
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            font-weight: 600;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239,68,68,0.08);
+        }
+
+        /* =========================================================
+           MAIN
+        ========================================================= */
+
+        .main {
+            width: calc(100% - 260px);
+
+            margin-left: 260px;
+
+            min-height: 100vh;
+        }
+
+        /* =========================================================
+           TOPBAR
+        ========================================================= */
+
+        .topbar {
+            position: sticky;
+            top: 0;
+
+            height: 76px;
+
+            background: rgba(11,15,25,0.82);
+
+            backdrop-filter: blur(15px);
+
+            border-bottom: 1px solid var(--border);
+
+            display: flex;
+            align-items: center;
+            gap: 15px;
+
+            padding: 0 30px;
+
+            z-index: 500;
+        }
+
+        html[data-theme="light"] .topbar {
+            background: rgba(255,255,255,0.88);
+        }
+
+        .mobile-menu {
+            display: none;
+
+            width: 40px;
+            height: 40px;
+
+            border: 1px solid var(--border);
+
+            background: var(--card);
+
+            color: var(--text);
+
+            border-radius: 10px;
+
+            font-size: 18px;
+        }
+
+        .search-wrapper {
+            flex: 1;
+
+            max-width: 550px;
+
+            position: relative;
+        }
+
+        .search-wrapper input {
+            width: 100%;
+
+            height: 42px;
+
+            padding: 0 15px 0 42px;
+
+            border: 1px solid var(--border);
+
+            background: var(--input-bg);
+
+            color: var(--text);
+
+            border-radius: 11px;
+
+            outline: none;
+
+            font-size: 13px;
+        }
+
+        .search-wrapper input:focus {
+            border-color: var(--primary);
+        }
+
+        .search-icon {
+            position: absolute;
+
+            left: 15px;
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            color: var(--muted);
+        }
+
+        .topbar-actions {
+            margin-left: auto;
+
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 42px;
+            height: 42px;
+
+            border: 1px solid var(--border);
+
+            background: var(--card);
+
+            color: var(--text-secondary);
+
+            border-radius: 11px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            position: relative;
+
+            font-size: 17px;
+        }
+
+        .icon-btn:hover {
+            color: var(--text);
+            border-color: rgba(109,93,252,0.45);
+        }
+
+        .notification-dot {
+            position: absolute;
+
+            top: 7px;
+            right: 7px;
+
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: var(--danger);
+
+            display: none;
+        }
+
+        .profile-button {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+
+            border: 0;
+
+            background: transparent;
+
+            color: var(--text);
+
+            padding: 3px 5px;
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+
+            border-radius: 50%;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    #8b5cf6
+                );
+
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-weight: 800;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .profile-name {
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .profile-email {
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        /* =========================================================
+           NOTIFICATIONS
+        ========================================================= */
+
+        .notification-wrapper {
+            position: relative;
+        }
+
+        .notification-dropdown {
+            position: absolute;
+
+            top: 52px;
+            right: 0;
+
+            width: 350px;
+
+            background: var(--card);
+
+            border: 1px solid var(--border);
+
+            border-radius: 15px;
+
+            box-shadow: var(--shadow);
+
+            display: none;
+
+            overflow: hidden;
+
+            z-index: 2000;
+        }
+
+        .notification-dropdown.show {
+            display: block;
+        }
+
+        .notification-header {
+            padding: 15px;
+
+            border-bottom: 1px solid var(--border);
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .notification-header h3 {
+            font-size: 14px;
+        }
+
+        .notification-header button {
+            border: 0;
+            background: transparent;
+
+            color: var(--primary);
+
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .notifications-list {
+            max-height: 350px;
+            overflow-y: auto;
+        }
+
+        .notification-item {
+            padding: 13px 15px;
+
+            border-bottom: 1px solid var(--border);
+
+            display: flex;
+            gap: 11px;
+
+            cursor: pointer;
+        }
+
+        .notification-item:hover {
+            background: var(--card-hover);
+        }
+
+        .notification-item.unread {
+            background: rgba(109,93,252,0.07);
+        }
+
+        .notification-icon {
+            width: 32px;
+            height: 32px;
+
+            border-radius: 9px;
+
+            background: rgba(109,93,252,0.12);
+
+            color: var(--primary);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            flex-shrink: 0;
+        }
+
+        .notification-content p {
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        .notification-content span {
+            display: block;
+
+            margin-top: 4px;
+
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        .empty-notifications {
+            padding: 35px 15px;
+
+            text-align: center;
+
+            color: var(--muted);
+
+            font-size: 12px;
+        }
+
+        /* =========================================================
+           CONTENT
+        ========================================================= */
+
+        .content {
+            padding: 30px;
+            max-width: 1600px;
+            margin: auto;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        /* =========================================================
+           PAGE HEADER
+        ========================================================= */
+
+        .page-header {
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            font-size: 25px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+
+        .page-header p {
+            margin-top: 6px;
+
+            color: var(--text-secondary);
+
+            font-size: 13px;
+        }
+
+        /* =========================================================
+           WELCOME
+        ========================================================= */
+
+        .welcome-card {
+            padding: 27px;
+
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(109,93,252,0.18),
+                    rgba(139,92,246,0.05)
+                );
+
+            border: 1px solid rgba(109,93,252,0.20);
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 20px;
+
+            margin-bottom: 24px;
+        }
+
+        .welcome-card h1 {
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .welcome-card p {
+            margin-top: 7px;
+
+            color: var(--text-secondary);
+
+            font-size: 13px;
+        }
+
+        .welcome-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* =========================================================
+           BUTTONS
+        ========================================================= */
+
+        .btn {
+            min-height: 42px;
+
+            border: 0;
+
+            border-radius: 10px;
+
+            padding: 0 16px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            gap: 8px;
+
+            font-size: 12px;
+            font-weight: 700;
+
+            transition: 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--card);
+
+            color: var(--text);
+
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--card-hover);
+        }
+
+        .btn-danger {
+            background: rgba(239,68,68,0.10);
+            color: var(--danger);
+        }
+
+        .btn-success {
+            background: rgba(34,197,94,0.10);
+            color: var(--success);
+        }
+
+        .btn-sm {
+            min-height: 34px;
+
+            padding: 0 11px;
+
+            font-size: 11px;
+        }
+
+        /* =========================================================
+           STATS
+        ========================================================= */
+
+        .stats-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+
+            gap: 16px;
+
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            padding: 20px;
+
+            background: var(--card);
+
+            border: 1px solid var(--border);
+
+            border-radius: var(--radius);
+
+            box-shadow: var(--shadow);
+
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+
+            border-radius: 13px;
+
+            background: rgba(109,93,252,0.12);
+
+            color: var(--primary);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 20px;
+        }
+
+        .stat-card:nth-child(2) .stat-icon {
+            color: var(--success);
+            background: rgba(34,197,94,0.10);
+        }
+
+        .stat-card:nth-child(3) .stat-icon {
+            color: var(--warning);
+            background: rgba(245,158,11,0.10);
+        }
+
+        .stat-card:nth-child(4) .stat-icon {
+            color: var(--info);
+            background: rgba(59,130,246,0.10);
+        }
+
+        .stat-info span {
+            display: block;
+
+            color: var(--muted);
+
+            font-size: 11px;
+        }
+
+        .stat-info strong {
+            display: block;
+
+            margin-top: 4px;
+
+            font-size: 20px;
+        }
+
+        /* =========================================================
+           DASHBOARD GRID
+        ========================================================= */
+
+        .dashboard-grid {
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 2fr)
+                minmax(280px, 1fr);
+
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--card);
+
+            border: 1px solid var(--border);
+
+            border-radius: var(--radius);
+
+            box-shadow: var(--shadow);
+
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 17px 19px;
+
+            border-bottom: 1px solid var(--border);
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .card-header h3 {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .card-header a,
+        .card-header button {
+            border: 0;
+            background: transparent;
+
+            color: var(--primary);
+
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .card-body {
+            padding: 18px;
+        }
+
+        /* =========================================================
+           TABLE
+        ========================================================= */
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .file-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        .file-table th {
+            padding: 12px 15px;
+
+            color: var(--muted);
+
+            text-align: left;
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.06em;
+
+            border-bottom: 1px solid var(--border);
+        }
+
+        .file-table td {
+            padding: 13px 15px;
+
+            border-bottom: 1px solid var(--border);
+
+            font-size: 12px;
+        }
+
+        .file-table tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .file-table tbody tr:hover {
+            background: var(--card-hover);
+        }
+
+        .file-name-cell {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .file-icon {
+            width: 36px;
+            height: 36px;
+
+            border-radius: 9px;
+
+            background: rgba(109,93,252,0.10);
+
+            color: var(--primary);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            flex-shrink: 0;
+        }
+
+        .file-name {
+            max-width: 230px;
+
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            font-weight: 600;
+        }
+
+        .file-type {
+            display: block;
+
+            margin-top: 3px;
+
+            color: var(--muted);
+
+            font-size: 10px;
+        }
+
+        .action-group {
+            display: flex;
+            gap: 5px;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 8px;
+
+            background: transparent;
+
+            color: var(--text-secondary);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 13px;
+        }
+
+        .action-btn:hover {
+            color: var(--text);
+            background: var(--card-hover);
+        }
+
+        .action-btn.delete:hover {
+            color: var(--danger);
+            border-color: rgba(239,68,68,0.25);
+        }
+
+        /* =========================================================
+           ACTIVITY
+        ========================================================= */
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 11px;
+
+            padding: 12px 0;
+
+            border-bottom: 1px solid var(--border);
+        }
+
+        .activity-item:last-child {
+            border-bottom: 0;
+        }
+
+        .activity-icon {
+            width: 32px;
+            height: 32px;
+
+            flex-shrink: 0;
+
+            border-radius: 9px;
+
+            background: rgba(109,93,252,0.10);
+
+            color: var(--primary);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .activity-text {
+            flex: 1;
+        }
+
+        .activity-text p {
+            font-size: 11px;
+            line-height: 1.45;
+        }
+
+        .activity-text span {
+            display: block;
+
+            margin-top: 4px;
+
+            font-size: 9px;
+            color: var(--muted);
+        }
+
+        /* =========================================================
+           STORAGE
+        ========================================================= */
+
+        .storage-card {
+            padding: 20px;
+        }
+
+        .storage-big {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .storage-circle {
+            width: 105px;
+            height: 105px;
+
+            border-radius: 50%;
+
+            background:
+                conic-gradient(
+                    var(--primary) var(--storage-percent, 0%),
+                    var(--border) 0
+                );
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            position: relative;
+        }
+
+        .storage-circle::before {
+            content: "";
+
+            position: absolute;
+
+            width: 78px;
+            height: 78px;
+
+            border-radius: 50%;
+
+            background: var(--card);
+        }
+
+        .storage-circle span {
+            position: relative;
+
+            z-index: 2;
+
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .storage-info strong {
+            display: block;
+
+            font-size: 20px;
+        }
+
+        .storage-info span {
+            display: block;
+
+            margin-top: 4px;
+
+            color: var(--muted);
+
+            font-size: 11px;
+        }
+
+        /* =========================================================
+           EMPTY
+        ========================================================= */
+
+        .empty-state {
+            padding: 45px 20px;
+
+            text-align: center;
+
+            color: var(--muted);
+        }
+
+        .empty-state-icon {
+            width: 50px;
+            height: 50px;
+
+            margin: 0 auto 12px;
+
+            border-radius: 14px;
+
+            background: var(--card-hover);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 20px;
+        }
+
+        .empty-state h3 {
+            color: var(--text);
+
+            font-size: 14px;
+
+            margin-bottom: 5px;
+        }
+
+        .empty-state p {
+            font-size: 11px;
+        }
+
+        /* =========================================================
+           UPLOAD DROPZONE
+        ========================================================= */
+
+        .upload-zone {
+            border: 2px dashed var(--border);
+
+            border-radius: 15px;
+
+            padding: 45px 25px;
+
+            text-align: center;
+
+            transition: 0.2s ease;
+        }
+
+        .upload-zone:hover,
+        .upload-zone.dragover {
+            border-color: var(--primary);
+
+            background: rgba(109,93,252,0.05);
+        }
+
+        .upload-zone-icon {
+            width: 55px;
+            height: 55px;
+
+            margin: 0 auto 15px;
+
+            border-radius: 15px;
+
+            background: rgba(109,93,252,0.10);
+
+            color: var(--primary);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 23px;
+        }
+
+        .upload-zone h3 {
+            font-size: 15px;
+        }
+
+        .upload-zone p {
+            margin-top: 6px;
+
+            color: var(--muted);
+
+            font-size: 11px;
+        }
+
+        .upload-zone input {
+            display: none;
+        }
+
+        /* =========================================================
+           FILTER BAR
+        ========================================================= */
+
+        .filter-bar {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 18px;
+
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            height: 40px;
+
+            border: 1px solid var(--border);
+
+            background: var(--input-bg);
+
+            color: var(--text);
+
+            border-radius: 10px;
+
+            padding: 0 12px;
+
+            outline: none;
+
+            font-size: 12px;
+        }
+
+        /* =========================================================
+           SHARED TABS
+        ========================================================= */
+
+        .sub-tabs {
+            display: flex;
+            gap: 5px;
+
+            margin-bottom: 20px;
+
+            background: var(--card);
+
+            border: 1px solid var(--border);
+
+            border-radius: 11px;
+
+            padding: 4px;
+
+            width: fit-content;
+        }
+
+        .sub-tab {
+            border: 0;
+
+            background: transparent;
+
+            color: var(--text-secondary);
+
+            padding: 9px 15px;
+
+            border-radius: 8px;
+
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .sub-tab.active {
+            background: var(--primary);
+
+            color: white;
+        }
+
+        /* =========================================================
+           SETTINGS
+        ========================================================= */
+
+        .settings-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 20px;
+        }
+
+        .setting-card {
+            padding: 20px;
+
+            background: var(--card);
+
+            border: 1px solid var(--border);
+
+            border-radius: var(--radius);
+        }
+
+        .setting-card h3 {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .setting-card > p {
+            color: var(--muted);
+
+            font-size: 11px;
+
+            margin-bottom: 18px;
+        }
+
+        .setting-row {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            padding: 13px 0;
+
+            border-bottom: 1px solid var(--border);
+        }
+
+        .setting-row:last-child {
+            border-bottom: 0;
+        }
+
+        .setting-label strong {
+            display: block;
+
+            font-size: 12px;
+        }
+
+        .setting-label span {
+            display: block;
+
+            margin-top: 3px;
+
+            color: var(--muted);
+
+            font-size: 10px;
+        }
+
+        .theme-buttons {
+            display: flex;
+            gap: 6px;
+        }
+
+        .theme-btn {
+            padding: 8px 11px;
+
+            border: 1px solid var(--border);
+
+            background: transparent;
+
+            color: var(--text-secondary);
+
+            border-radius: 8px;
+
+            font-size: 11px;
+        }
+
+        .theme-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        /* =========================================================
+           MODAL
+        ========================================================= */
+
+        .modal-overlay {
+            position: fixed;
+
+            inset: 0;
+
+            background: rgba(0,0,0,0.65);
+
+            backdrop-filter: blur(5px);
+
+            display: none;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+
+            z-index: 3000;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 500px;
+
+            background: var(--card);
+
+            border: 1px solid var(--border);
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 25px 70px rgba(0,0,0,0.4);
+
+            overflow: hidden;
+
+            animation: modalIn 0.2s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            padding: 17px 20px;
+
+            border-bottom: 1px solid var(--border);
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 15px;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+
+            border: 0;
+
+            background: transparent;
+
+            color: var(--muted);
+
+            border-radius: 8px;
+
+            font-size: 17px;
+        }
+
+        .modal-close:hover {
+            background: var(--card-hover);
+            color: var(--text);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+
+            border-top: 1px solid var(--border);
+
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+
+            margin-bottom: 7px;
+
+            font-size: 11px;
+
+            font-weight: 700;
+        }
+
+        .form-input {
+            width: 100%;
+
+            height: 43px;
+
+            border: 1px solid var(--border);
+
+            background: var(--input-bg);
+
+            color: var(--text);
+
+            border-radius: 10px;
+
+            padding: 0 12px;
+
+            outline: none;
+
+            font-size: 12px;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+        }
+
+        textarea.form-input {
+            height: 90px;
+
+            padding: 12px;
+
+            resize: vertical;
+        }
+
+        .upload-tabs {
+            display: flex;
+
+            gap: 5px;
+
+            margin-bottom: 15px;
+        }
+
+        .upload-tab {
+            flex: 1;
+
+            height: 38px;
+
+            border: 1px solid var(--border);
+
+            background: transparent;
+
+            color: var(--text-secondary);
+
+            border-radius: 9px;
+
+            font-size: 11px;
+
+            font-weight: 600;
+        }
+
+        .upload-tab.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        /* =========================================================
+           CONFIRM MODAL
+        ========================================================= */
+
+        .confirm-icon {
+            width: 48px;
+            height: 48px;
+
+            border-radius: 13px;
+
+            background: rgba(239,68,68,0.10);
+
+            color: var(--danger);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 20px;
+
+            margin-bottom: 14px;
+        }
+
+        .confirm-message {
+            color: var(--text-secondary);
+
+            font-size: 12px;
+
+            line-height: 1.6;
+        }
+
+        /* =========================================================
+           TOAST
+        ========================================================= */
+
+        #toastContainer {
+            position: fixed;
+
+            right: 22px;
+            bottom: 22px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 9px;
+
+            z-index: 5000;
+        }
+
+        .toast {
+            min-width: 280px;
+            max-width: 380px;
+
+            padding: 13px 15px;
+
+            border-radius: 11px;
+
+            background: var(--card);
+
+            border: 1px solid var(--border);
+
+            box-shadow: var(--shadow);
+
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 10px;
+
+            animation: toastIn 0.25s ease;
+        }
+
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateX(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .toast-icon {
+            width: 28px;
+            height: 28px;
+
+            border-radius: 8px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            flex-shrink: 0;
+        }
+
+        .toast.success .toast-icon {
+            background: rgba(34,197,94,0.12);
+            color: var(--success);
+        }
+
+        .toast.error .toast-icon {
+            background: rgba(239,68,68,0.12);
+            color: var(--danger);
+        }
+
+        .toast.info .toast-icon {
+            background: rgba(59,130,246,0.12);
+            color: var(--info);
+        }
+
+        .toast.warning .toast-icon {
+            background: rgba(245,158,11,0.12);
+            color: var(--warning);
+        }
+
+        .toast-message {
+            flex: 1;
+
+            font-size: 11px;
+
+            line-height: 1.5;
+
+            padding-top: 4px;
+        }
+
+        /* =========================================================
+           LOADER
+        ========================================================= */
+
+        .loader-overlay {
+            position: fixed;
+
+            inset: 0;
+
+            background: rgba(0,0,0,0.55);
+
+            backdrop-filter: blur(4px);
+
+            display: none;
+
+            align-items: center;
+            justify-content: center;
+
+            z-index: 6000;
+        }
+
+        .loader-overlay.show {
+            display: flex;
+        }
+
+        .loader-box {
+            background: var(--card);
+
+            border: 1px solid var(--border);
+
+            border-radius: 15px;
+
+            padding: 25px 30px;
+
+            text-align: center;
+        }
+
+        .spinner {
+            width: 35px;
+            height: 35px;
+
+            border: 3px solid var(--border);
+
+            border-top-color: var(--primary);
+
+            border-radius: 50%;
+
+            animation: spin 0.8s linear infinite;
+
+            margin: auto;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loader-box p {
+            margin-top: 12px;
+
+            font-size: 11px;
+
+            color: var(--text-secondary);
+        }
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 1100px) {
+
+            .stats-grid {
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 850px) {
+
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            .mobile-menu {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .profile-info {
+                display: none;
+            }
+
+            .topbar {
+                padding: 0 15px;
+            }
+
+            .content {
+                padding: 20px 15px;
+            }
+
+            .welcome-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-wrapper {
+                display: none;
+            }
+
+            .topbar-actions {
+                margin-left: auto;
+            }
+
+            .welcome-card {
+                padding: 20px;
+            }
+
+            .welcome-card h1 {
+                font-size: 20px;
+            }
+
+            .notification-dropdown {
+                position: fixed;
+
+                top: 70px;
+                right: 10px;
+                left: 10px;
+
+                width: auto;
+            }
+
+            .storage-big {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            #toastContainer {
+                left: 12px;
+                right: 12px;
+                bottom: 12px;
+            }
+
+            .toast {
+                min-width: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- =========================================================
+         SIDEBAR
+    ========================================================== -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+            <div class="brand-logo">
+                S
+            </div>
+
+            <div class="brand-text">
+                <h2>SnapDrive</h2>
+                <span>Cloud File Management</span>
+            </div>
+        </div>
+
+        <div class="nav-title">
+            Main
+        </div>
+
+        <nav class="nav">
+
+            <button
+                class="nav-item active"
+                data-view="dashboard"
+                onclick="switchView('dashboard')"
+            >
+                <span class="nav-icon">⌂</span>
+                <span>Dashboard</span>
+            </button>
+
+            <button
+                class="nav-item"
+                data-view="files"
+                onclick="switchView('files')"
+            >
+                <span class="nav-icon">▣</span>
+                <span>My Files</span>
+            </button>
+
+            <button
+                class="nav-item"
+                data-view="shared"
+                onclick="switchView('shared')"
+            >
+                <span class="nav-icon">⇄</span>
+                <span>Shared Files</span>
+            </button>
+
+            <button
+                class="nav-item"
+                data-view="activity"
+                onclick="switchView('activity')"
+            >
+                <span class="nav-icon">◷</span>
+                <span>Activity</span>
+            </button>
+
+            <button
+                class="nav-item"
+                data-view="storage"
+                onclick="switchView('storage')"
+            >
+                <span class="nav-icon">◉</span>
+                <span>Storage</span>
+            </button>
+
+        </nav>
+
+        <div class="nav-title">
+            System
+        </div>
+
+        <nav class="nav">
+
+            <button
+                class="nav-item"
+                data-view="settings"
+                onclick="switchView('settings')"
+            >
+                <span class="nav-icon">⚙</span>
+                <span>Settings</span>
+            </button>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+    <div class="storage-mini">
+
+        <div class="storage-mini-header">
+            <span>Storage</span>
+
+            <span id="sidebarStorageText">
+                0 MB / 1 GB
+            </span>
+        </div>
+
+        <div class="progress">
+            <div
+                class="progress-bar"
+                id="sidebarStorageProgress"
+            ></div>
+        </div>
+
+    </div>
+
+    <button
+        class="logout-btn"
+        id="sidebarLogoutBtn"
+        type="button"
+        onclick="handleLogout()"
+    >
+        <span class="logout-icon">↪</span>
+        <span>Logout</span>
+    </button>
+
+</div>
+
+    </aside>
+
+
+    <!-- =========================================================
+         MAIN
+    ========================================================== -->
+
+    <main class="main">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <button
+                class="mobile-menu"
+                type="button"
+                onclick="toggleSidebar()"
+            >
+                ☰
+            </button>
+
+            <div class="search-wrapper">
+
+                <span class="search-icon">
+                    ⌕
+                </span>
+
+                <input
+                    id="globalSearch"
+                    type="text"
+                    placeholder="Search files..."
+                    autocomplete="off"
+                    oninput="searchFiles()"
+                >
+
+            </div>
+
+            <div class="topbar-actions">
+
+                <!-- Theme -->
+
+                <button
+                    class="icon-btn"
+                    id="themeToggle"
+                    type="button"
+                    onclick="toggleTheme()"
+                    title="Toggle theme"
+                >
+                    ☀
+                </button>
+
+                <!-- Notifications -->
+
+                <div class="notification-wrapper">
+
+                    <button
+                        class="icon-btn"
+                        type="button"
+                        onclick="toggleNotificationsDropdown()"
+                        title="Notifications"
+                    >
+                        ♢
+
+                        <span
+                            class="notification-dot"
+                            id="notificationDot"
+                        ></span>
+                    </button>
+
+                    <div
+                        class="notification-dropdown"
+                        id="notificationDropdown"
+                    >
+
+                        <div class="notification-header">
+
+                            <h3>Notifications</h3>
+
+                            <button
+                                type="button"
+                                onclick="markAllNotificationsAsRead()"
+                            >
+                                Mark all as read
+                            </button>
+
+                        </div>
+
+                        <div
+                            class="notifications-list"
+                            id="notificationsList"
+                        >
+                            <div class="empty-notifications">
+                                No notifications
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Profile -->
+
+                <button
+                    class="profile-button"
+                    type="button"
+                    onclick="switchView('settings')"
+                >
+
+                    <div
+                        class="avatar"
+                        id="profileAvatar"
+                    >
+                        U
+                    </div>
+
+                    <div class="profile-info">
+
+                        <span
+                            class="profile-name"
+                            id="profileName"
+                        >
+                            User
+                        </span>
+
+                        <span
+                            class="profile-email"
+                            id="profileEmail"
+                        >
+                            user@example.com
+                        </span>
+
+                    </div>
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+
+        <section class="content">
+
+
+            <!-- =================================================
+                 DASHBOARD VIEW
+            ================================================== -->
+
+            <div
+                class="view active"
+                id="view-dashboard"
+            >
+
+                <div class="welcome-card">
+
+                    <div>
+
+                        <h1>
+                            Welcome back,
+                            <span id="welcomeName">User</span>
+                        </h1>
+
+                        <p>
+                            Manage your files securely from one place.
+                        </p>
+
+                    </div>
+
+                    <div class="welcome-actions">
+
+                        <button
+                            class="btn btn-primary"
+                            onclick="openUploadModal()"
+                        >
+                            ＋ Upload File
+                        </button>
+
+                        <button
+                            class="btn btn-secondary"
+                            onclick="openFolderModal()"
+                        >
+                            ＋ New Folder
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- STATS -->
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            ▣
+                        </div>
+
+                        <div class="stat-info">
+
+                            <span>Total Files</span>
+
+                            <strong id="totalFiles">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            ◉
+                        </div>
+
+                        <div class="stat-info">
+
+                            <span>Storage Used</span>
+
+                            <strong id="storageUsed">
+                                0 MB
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            ⇄
+                        </div>
+
+                        <div class="stat-info">
+
+                            <span>Shared With Me</span>
+
+                            <strong id="sharedCount">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            ◷
+                        </div>
+
+                        <div class="stat-info">
+
+                            <span>Activities</span>
+
+                            <strong id="activityCount">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DASHBOARD GRID -->
+
+                <div class="dashboard-grid">
+
+                    <!-- RECENT FILES -->
+
+                    <div class="card">
+
+                        <div class="card-header">
+
+                            <h3>Recent Files</h3>
+
+                            <button
+                                onclick="switchView('files')"
+                            >
+                                View all
+                            </button>
+
+                        </div>
+
+                        <div class="table-wrapper">
+
+                            <table class="file-table">
+
+                                <thead>
+
+                                    <tr>
+                                        <th>File</th>
+                                        <th>Size</th>
+                                        <th>Uploaded</th>
+                                        <th>Actions</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody id="recentFilesBody">
+
+                                    <tr>
+                                        <td colspan="4">
+
+                                            <div class="empty-state">
+
+                                                <div class="empty-state-icon">
+                                                    ▣
+                                                </div>
+
+                                                <h3>No files yet</h3>
+
+                                                <p>
+                                                    Upload your first file.
+                                                </p>
+
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ACTIVITY -->
+
+                    <div class="card">
+
+                        <div class="card-header">
+
+                            <h3>Recent Activity</h3>
+
+                            <button
+                                onclick="switchView('activity')"
+                            >
+                                View all
+                            </button>
+
+                        </div>
+
+                        <div class="card-body">
+
+                            <div
+                                class="activity-list"
+                                id="recentActivityList"
+                            >
+
+                                <div class="empty-state">
+                                    No recent activity
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- STORAGE -->
+
+                <div
+                    class="card"
+                    style="margin-top:20px;"
+                >
+
+                    <div class="card-header">
+
+                        <h3>Storage Overview</h3>
+
+                        <button
+                            onclick="switchView('storage')"
+                        >
+                            Details
+                        </button>
+
+                    </div>
+
+                    <div class="storage-card">
+
+                        <div class="storage-big">
+
+                            <div
+                                class="storage-circle"
+                                id="dashboardStorageCircle"
+                            >
+                                <span id="dashboardStoragePercent">
+                                    0%
+                                </span>
+                            </div>
+
+                            <div class="storage-info">
+
+                                <strong id="dashboardStorageUsed">
+                                    0 MB
+                                </strong>
+
+                                <span>
+                                    used out of 1 GB
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 FILES VIEW
+            ================================================== -->
+
+            <div
+                class="view"
+                id="view-files"
+            >
+
+                <div class="page-header">
+
+                    <h1>My Files</h1>
+
+                    <p>
+                        Manage all your uploaded files.
+                    </p>
+
+                </div>
+
+
+                <div class="filter-bar">
+
+                    <button
+                        class="btn btn-primary"
+                        onclick="openUploadModal()"
+                    >
+                        ＋ Upload File
+                    </button>
+
+                    <button
+                        class="btn btn-secondary"
+                        onclick="openFolderModal()"
+                    >
+                        ＋ New Folder
+                    </button>
+
+                    <select
+                        class="filter-select"
+                        id="fileTypeFilter"
+                        onchange="filterFiles()"
+                    >
+
+                        <option value="all">
+                            All Types
+                        </option>
+
+                        <option value="image">
+                            Images
+                        </option>
+
+                        <option value="pdf">
+                            PDF
+                        </option>
+
+                        <option value="document">
+                            Documents
+                        </option>
+
+                        <option value="other">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="table-wrapper">
+
+                        <table class="file-table">
+
+                            <thead>
+
+                                <tr>
+                                    <th>File</th>
+                                    <th>Type</th>
+                                    <th>Size</th>
+                                    <th>Uploaded</th>
+                                    <th>Actions</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="fullFileListBody">
+
+                                <tr>
+                                    <td colspan="5">
+
+                                        <div class="empty-state">
+
+                                            <div class="empty-state-icon">
+                                                ▣
+                                            </div>
+
+                                            <h3>No files found</h3>
+
+                                            <p>
+                                                Upload a file to get started.
+                                            </p>
+
+                                        </div>
+
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 SHARED VIEW
+            ================================================== -->
+
+            <div
+                class="view"
+                id="view-shared"
+            >
+
+                <div class="page-header">
+
+                    <h1>Shared Files</h1>
+
+                    <p>
+                        Files shared with you and files you have shared.
+                    </p>
+
+                </div>
+
+
+                <div class="sub-tabs">
+
+                    <button
+                        class="sub-tab active"
+                        id="sharedWithMeTab"
+                        onclick="setSharedSubView('with-me')"
+                    >
+                        Shared With Me
+                    </button>
+
+                    <button
+                        class="sub-tab"
+                        id="sharedByMeTab"
+                        onclick="setSharedSubView('by-me')"
+                    >
+                        Shared By Me
+                    </button>
+
+                </div>
+
+
+                <!-- SHARED WITH ME -->
+
+                <div
+                    id="sharedWithMeSection"
+                >
+
+                    <div class="card">
+
+                        <div class="table-wrapper">
+
+                            <table class="file-table">
+
+                                <thead>
+
+                                    <tr>
+                                        <th>File</th>
+                                        <th>Owner</th>
+                                        <th>Shared On</th>
+                                        <th>Actions</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody id="sharedFilesBody">
+
+                                    <tr>
+                                        <td colspan="4">
+
+                                            <div class="empty-state">
+
+                                                <div class="empty-state-icon">
+                                                    ⇄
+                                                </div>
+
+                                                <h3>No shared files</h3>
+
+                                                <p>
+                                                    Files shared with you will appear here.
+                                                </p>
+
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SHARED BY ME -->
+
+                <div
+                    id="sharedByMeSection"
+                    style="display:none;"
+                >
+
+                    <div class="card">
+
+                        <div class="table-wrapper">
+
+                            <table class="file-table">
+
+                                <thead>
+
+                                    <tr>
+                                        <th>File</th>
+                                        <th>Shared With</th>
+                                        <th>Shared On</th>
+                                        <th>Actions</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody id="sharedByMeBody">
+
+                                    <tr>
+                                        <td colspan="4">
+
+                                            <div class="empty-state">
+
+                                                <div class="empty-state-icon">
+                                                    ⇄
+                                                </div>
+
+                                                <h3>No shared files</h3>
+
+                                                <p>
+                                                    Files you share will appear here.
+                                                </p>
+
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 ACTIVITY VIEW
+            ================================================== -->
+
+            <div
+                class="view"
+                id="view-activity"
+            >
+
+                <div class="page-header">
+
+                    <h1>Activity</h1>
+
+                    <p>
+                        Track activity performed on your files.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-body">
+
+                        <div
+                            class="activity-list"
+                            id="activityList"
+                        >
+
+                            <div class="empty-state">
+                                No activity available.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 STORAGE VIEW
+            ================================================== -->
+
+            <div
+                class="view"
+                id="view-storage"
+            >
+
+                <div class="page-header">
+
+                    <h1>Storage</h1>
+
+                    <p>
+                        Monitor your SnapDrive storage usage.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="storage-card">
+
+                        <div class="storage-big">
+
+                            <div
+                                class="storage-circle"
+                                id="storageDetailsCircle"
+                            >
+                                <span id="storageDetailsPercent">
+                                    0%
+                                </span>
+                            </div>
+
+                            <div class="storage-info">
+
+                                <strong id="storageDetailsUsed">
+                                    0 MB
+                                </strong>
+
+                                <span>
+                                    used out of 1 GB
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div style="margin-top:25px;">
+
+                            <div class="storage-mini-header">
+
+                                <span>
+                                    Storage Usage
+                                </span>
+
+                                <span id="storageDetailsText">
+                                    0 MB / 1 GB
+                                </span>
+
+                            </div>
+
+                            <div class="progress">
+
+                                <div
+                                    class="progress-bar"
+                                    id="storageDetailsProgress"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 SETTINGS VIEW
+            ================================================== -->
+
+            <div
+                class="view"
+                id="view-settings"
+            >
+
+                <div class="page-header">
+
+                    <h1>Settings</h1>
+
+                    <p>
+                        Manage your SnapDrive preferences.
+                    </p>
+
+                </div>
+
+
+                <div class="settings-grid">
+
+
+                    <!-- PROFILE -->
+
+                    <div class="setting-card">
+
+                        <h3>Profile</h3>
+
+                        <p>
+                            Your account information.
+                        </p>
+
+
+                        <div class="setting-row">
+
+                            <div class="setting-label">
+
+                                <strong>Name</strong>
+
+                                <span id="settingsName">
+                                    User
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="setting-row">
+
+                            <div class="setting-label">
+
+                                <strong>Email</strong>
+
+                                <span id="settingsEmail">
+                                    user@example.com
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="setting-row">
+
+                            <div class="setting-label">
+
+                                <strong>Account Status</strong>
+
+                                <span id="settingsStatus">
+                                    Active
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- APPEARANCE -->
+
+                    <div class="setting-card">
+
+                        <h3>Appearance</h3>
+
+                        <p>
+                            Customize the appearance of SnapDrive.
+                        </p>
+
+
+                        <div class="setting-row">
+
+                            <div class="setting-label">
+
+                                <strong>Theme</strong>
+
+                                <span>
+                                    Choose light or dark mode.
+                                </span>
+
+                            </div>
+
+                            <div class="theme-buttons">
+
+                                <button
+                                    class="theme-btn"
+                                    id="darkThemeBtn"
+                                    onclick="setTheme('dark')"
+                                >
+                                    Dark
+                                </button>
+
+                                <button
+                                    class="theme-btn"
+                                    id="lightThemeBtn"
+                                    onclick="setTheme('light')"
+                                >
+                                    Light
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- STORAGE -->
+
+                    <div class="setting-card">
+
+                        <h3>Storage</h3>
+
+                        <p>
+                            Your current storage limit.
+                        </p>
+
+
+                        <div class="setting-row">
+
+                            <div class="setting-label">
+
+                                <strong>Storage Limit</strong>
+
+                                <span>
+                                    Maximum allowed storage
+                                </span>
+
+                            </div>
+
+                            <strong>
+                                1 GB
+                            </strong>
+
+                        </div>
+
+
+                        <div class="setting-row">
+
+                            <div class="setting-label">
+
+                                <strong>Used Storage</strong>
+
+                                <span id="settingsStorage">
+                                    0 MB
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SECURITY -->
+
+                    <div class="setting-card">
+
+                        <h3>Security</h3>
+
+                        <p>
+                            Account and authentication information.
+                        </p>
+
+
+                        <div class="setting-row">
+
+                            <div class="setting-label">
+
+                                <strong>Email Verification</strong>
+
+                                <span id="verificationStatus">
+                                    Checking...
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="setting-row">
+
+                            <div class="setting-label">
+
+                                <strong>Authentication</strong>
+
+                                <span>
+                                    JWT authentication enabled
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="setting-card">
+
+    <h3>Account</h3>
+
+    <p>
+        Manage your SnapDrive account session.
+    </p>
+
+    <div class="setting-row">
+
+        <div class="setting-label">
+
+            <strong>Logout</strong>
+
+            <span>
+                Sign out from your SnapDrive account.
+            </span>
+
+        </div>
+
+        <button
+            class="btn btn-danger btn-sm"
+            type="button"
+            onclick="handleLogout()"
+        >
+            ↪ Logout
+        </button>
+
+    </div>
+
+</div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =============================================================
+     UPLOAD MODAL
+============================================================== -->
+
+<div
+    class="modal-overlay"
+    id="uploadModal"
+>
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h3>Upload to SnapDrive</h3>
+
+            <button
+                class="modal-close"
+                onclick="closeUploadModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="modal-body">
+
+            <div class="upload-tabs">
+
+                <button
+                    class="upload-tab active"
+                    id="fileUploadTab"
+                    onclick="setUploadTab('file')"
+                >
+                    File
+                </button>
+
+                <button
+                    class="upload-tab"
+                    id="folderUploadTab"
+                    onclick="setUploadTab('folder')"
+                >
+                    Folder
+                </button>
+
+            </div>
+
+
+            <div id="fileUploadPanel">
+
+                <div
+                    class="upload-zone"
+                    id="uploadDropZone"
+                    onclick="document.getElementById('fileInput').click()"
+                >
+
+                    <div class="upload-zone-icon">
+                        ↑
+                    </div>
+
+                    <h3>
+                        Drop your file here
+                    </h3>
+
+                    <p>
+                        or click to browse from your computer
+                    </p>
+
+                    <input
+                        type="file"
+                        id="fileInput"
+                        onchange="handleFileSelect(event)"
+                    >
+
+                </div>
+
+
+                <div
+                    id="selectedFileInfo"
+                    style="
+                        display:none;
+                        margin-top:15px;
+                        padding:12px;
+                        border:1px solid var(--border);
+                        border-radius:10px;
+                    "
+                >
+
+                    <div
+                        id="selectedFileName"
+                        style="
+                            font-size:12px;
+                            font-weight:700;
+                        "
+                    ></div>
+
+                    <div
+                        id="selectedFileSize"
+                        style="
+                            margin-top:4px;
+                            font-size:10px;
+                            color:var(--muted);
+                        "
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="folderUploadPanel"
+                style="display:none;"
+            >
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Folder
+                    </label>
+
+                    <select
+                        class="form-input"
+                        id="uploadFolderSelect"
+                    >
+
+                        <option value="">
+                            Root
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <p
+                    style="
+                        color:var(--muted);
+                        font-size:11px;
+                        line-height:1.5;
+                    "
+                >
+                    Select a folder and choose a file to upload into it.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="modal-footer">
+
+            <button
+                class="btn btn-secondary"
+                onclick="closeUploadModal()"
+            >
+                Cancel
+            </button>
+
+            <button
+                class="btn btn-primary"
+                onclick="submitModalUpload()"
+            >
+                Upload
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =============================================================
+     CREATE FOLDER MODAL
+============================================================== -->
+
+<div
+    class="modal-overlay"
+    id="folderModal"
+>
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h3>Create Folder</h3>
+
+            <button
+                class="modal-close"
+                onclick="closeFolderModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="modal-body">
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    Folder Name
+                </label>
+
+                <input
+                    class="form-input"
+                    id="folderNameInput"
+                    type="text"
+                    placeholder="Enter folder name"
+                    maxlength="100"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="modal-footer">
+
+            <button
+                class="btn btn-secondary"
+                onclick="closeFolderModal()"
+            >
+                Cancel
+            </button>
+
+            <button
+                class="btn btn-primary"
+                onclick="createFolder()"
+            >
+                Create Folder
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =============================================================
+     SHARE MODAL
+============================================================== -->
+
+<div
+    class="modal-overlay"
+    id="shareModal"
+>
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h3>Share File</h3>
+
+            <button
+                class="modal-close"
+                onclick="closeShareModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="modal-body">
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    File
+                </label>
+
+                <input
+                    class="form-input"
+                    id="shareFileName"
+                    type="text"
+                    readonly
+                >
+
+                <input
+                    id="shareFileId"
+                    type="hidden"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    User Email
+                </label>
+
+                <input
+                    class="form-input"
+                    id="shareEmailInput"
+                    type="email"
+                    placeholder="Enter registered user's email"
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <div
+                id="shareUserResults"
+                style="
+                    display:none;
+                    border:1px solid var(--border);
+                    border-radius:10px;
+                    overflow:hidden;
+                    margin-top:-8px;
+                    margin-bottom:15px;
+                "
+            ></div>
+
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    Message
+                </label>
+
+                <textarea
+                    class="form-input"
+                    id="shareMessageInput"
+                    placeholder="Optional message..."
+                ></textarea>
+
+            </div>
+
+        </div>
+
+
+        <div class="modal-footer">
+
+            <button
+                class="btn btn-secondary"
+                onclick="closeShareModal()"
+            >
+                Cancel
+            </button>
+
+            <button
+                class="btn btn-primary"
+                onclick="submitShare()"
+            >
+                Share File
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =============================================================
+     CONFIRMATION MODAL
+============================================================== -->
+
+<div
+    class="modal-overlay"
+    id="confirmModal"
+>
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h3 id="confirmTitle">
+                Confirm Action
+            </h3>
+
+            <button
+                class="modal-close"
+                onclick="closeConfirmModal(false)"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="modal-body">
+
+            <div class="confirm-icon">
+                !
+            </div>
+
+            <p
+                class="confirm-message"
+                id="confirmMessage"
+            >
+                Are you sure?
+            </p>
+
+        </div>
+
+
+        <div class="modal-footer">
+
+            <button
+                class="btn btn-secondary"
+                onclick="closeConfirmModal(false)"
+            >
+                Cancel
+            </button>
+
+            <button
+                class="btn btn-danger"
+                id="confirmActionButton"
+                onclick="closeConfirmModal(true)"
+            >
+                Confirm
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =============================================================
+     LOADER
+============================================================== -->
+
+<div
+    class="loader-overlay"
+    id="globalLoader"
+>
+
+    <div class="loader-box">
+
+        <div class="spinner"></div>
+
+        <p id="loaderMessage">
+            Please wait...
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =============================================================
+     TOAST
+============================================================== -->
+
+<div id="toastContainer"></div>
+
+
+<!-- =============================================================
+     JAVASCRIPT
+============================================================== -->
+
+<script>
+
+    /* =========================================================
+       THEME
+    ========================================================== */
+
+    function updateThemeIcons(theme) {
+
+        const themeToggle =
+            document.getElementById("themeToggle");
+
+        const darkButton =
+            document.getElementById("darkThemeBtn");
+
+        const lightButton =
+            document.getElementById("lightThemeBtn");
+
+
+        if (themeToggle) {
+
+            themeToggle.textContent =
+                theme === "dark" ? "☀" : "☾";
+
+            themeToggle.title =
+                theme === "dark"
+                    ? "Switch to light theme"
+                    : "Switch to dark theme";
+        }
+
+
+        if (darkButton) {
+
+            darkButton.classList.toggle(
+                "active",
+                theme === "dark"
+            );
+        }
+
+
+        if (lightButton) {
+
+            lightButton.classList.toggle(
+                "active",
+                theme === "light"
+            );
+        }
+    }
+
+
+    function setTheme(theme) {
+
+        if (
+            theme !== "dark" &&
+            theme !== "light"
+        ) {
+            theme = "dark";
+        }
+
+
+        document.documentElement.setAttribute(
+            "data-theme",
+            theme
+        );
+
+
+        localStorage.setItem(
+            "theme",
+            theme
+        );
+
+
+        updateThemeIcons(theme);
+    }
+
+
+    function toggleTheme() {
+
+        const currentTheme =
+            document.documentElement.getAttribute(
+                "data-theme"
+            ) || "dark";
+
+
+        const nextTheme =
+            currentTheme === "dark"
+                ? "light"
+                : "dark";
+
+
+        setTheme(nextTheme);
+    }
+
+
+    /* =========================================================
+       VIEW SWITCHING
+    ========================================================== */
+
+    function switchView(viewName) {
+
+        const views =
+            document.querySelectorAll(".view");
+
+
+        views.forEach(view => {
+
+            view.classList.remove("active");
+
+        });
+
+
+        const selectedView =
+            document.getElementById(
+                "view-" + viewName
+            );
+
+
+        if (selectedView) {
+
+            selectedView.classList.add("active");
+
+        }
+
+
+        const navItems =
+            document.querySelectorAll(".nav-item");
+
+
+        navItems.forEach(item => {
+
+            item.classList.remove("active");
+
+            if (
+                item.dataset.view === viewName
+            ) {
+
+                item.classList.add("active");
+
+            }
+
+        });
+
+
+        sessionStorage.setItem(
+            "activeView",
+            viewName
+        );
+
+
+        if (viewName === "files") {
+
+            if (typeof loadFiles === "function") {
+
+                loadFiles();
+
+            }
+
+        }
+
+
+        if (viewName === "shared") {
+
+            if (typeof loadSharedFiles === "function") {
+
+                loadSharedFiles();
+
+            }
+
+        }
+
+
+        if (viewName === "activity") {
+
+            if (typeof loadActivities === "function") {
+
+                loadActivities();
+
+            }
+
+        }
+
+
+        if (viewName === "storage") {
+
+            if (typeof loadStorageDetails === "function") {
+
+                loadStorageDetails();
+
+            }
+
+        }
+
+
+        closeSidebar();
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
+
+
+    /* =========================================================
+       SIDEBAR
+    ========================================================== */
+
+    function toggleSidebar() {
+
+        const sidebar =
+            document.getElementById("sidebar");
+
+
+        sidebar.classList.toggle("open");
+    }
+
+
+    function closeSidebar() {
+
+        const sidebar =
+            document.getElementById("sidebar");
+
+
+        if (sidebar) {
+
+            sidebar.classList.remove("open");
+
+        }
+    }
+
+
+    /* =========================================================
+       NOTIFICATIONS
+    ========================================================== */
+
+    function toggleNotificationsDropdown() {
+
+        const dropdown =
+            document.getElementById(
+                "notificationDropdown"
+            );
+
+
+        if (!dropdown) return;
+
+
+        dropdown.classList.toggle("show");
+    }
+
+
+    document.addEventListener(
+        "click",
+        function(event) {
+
+            const wrapper =
+                document.querySelector(
+                    ".notification-wrapper"
+                );
+
+
+            const dropdown =
+                document.getElementById(
+                    "notificationDropdown"
+                );
+
+
+            if (
+                wrapper &&
+                dropdown &&
+                !wrapper.contains(event.target)
+            ) {
+
+                dropdown.classList.remove("show");
+
+            }
+
+        }
+    );
+
+
+    /* =========================================================
+       UPLOAD MODAL
+    ========================================================== */
+
+    function openUploadModal() {
+
+        const modal =
+            document.getElementById(
+                "uploadModal"
+            );
+
+
+        if (modal) {
+
+            modal.classList.add("show");
+
+        }
+    }
+
+
+    function closeUploadModal() {
+
+        const modal =
+            document.getElementById(
+                "uploadModal"
+            );
+
+
+        if (modal) {
+
+            modal.classList.remove("show");
+
+        }
+    }
+
+
+    function setUploadTab(tab) {
+
+        const fileTab =
+            document.getElementById(
+                "fileUploadTab"
+            );
+
+        const folderTab =
+            document.getElementById(
+                "folderUploadTab"
+            );
+
+        const filePanel =
+            document.getElementById(
+                "fileUploadPanel"
+            );
+
+        const folderPanel =
+            document.getElementById(
+                "folderUploadPanel"
+            );
+
+
+        if (tab === "file") {
+
+            fileTab.classList.add("active");
+
+            folderTab.classList.remove("active");
+
+            filePanel.style.display = "block";
+
+            folderPanel.style.display = "none";
+
+        } else {
+
+            fileTab.classList.remove("active");
+
+            folderTab.classList.add("active");
+
+            filePanel.style.display = "block";
+
+            folderPanel.style.display = "block";
+
+        }
+
+    }
+
+
+    function handleFileSelect(event) {
+
+        const file =
+            event.target.files[0];
+
+
+        if (!file) return;
+
+
+        const info =
+            document.getElementById(
+                "selectedFileInfo"
+            );
+
+        const name =
+            document.getElementById(
+                "selectedFileName"
+            );
+
+        const size =
+            document.getElementById(
+                "selectedFileSize"
+            );
+
+
+        name.textContent =
+            file.name;
+
+
+        if (typeof formatFileSize === "function") {
+
+            size.textContent =
+                formatFileSize(file.size);
+
+        } else {
+
+            size.textContent =
+                Math.round(file.size / 1024) +
+                " KB";
+
+        }
+
+
+        info.style.display = "block";
+    }
+
+
+    /* =========================================================
+       FOLDER MODAL
+    ========================================================== */
+
+    function openFolderModal() {
+
+        const modal =
+            document.getElementById(
+                "folderModal"
+            );
+
+
+        if (modal) {
+
+            modal.classList.add("show");
+
+        }
+    }
+
+
+    function closeFolderModal() {
+
+        const modal =
+            document.getElementById(
+                "folderModal"
+            );
+
+
+        if (modal) {
+
+            modal.classList.remove("show");
+
+        }
+    }
+
+
+    /* =========================================================
+       SHARE MODAL
+    ========================================================== */
+
+    function openShareModal(fileId, fileName) {
+
+        const modal =
+            document.getElementById(
+                "shareModal"
+            );
+
+
+        const idInput =
+            document.getElementById(
+                "shareFileId"
+            );
+
+
+        const nameInput =
+            document.getElementById(
+                "shareFileName"
+            );
+
+
+        const emailInput =
+            document.getElementById(
+                "shareEmailInput"
+            );
+
+
+        const messageInput =
+            document.getElementById(
+                "shareMessageInput"
+            );
+
+
+        if (idInput) {
+
+            idInput.value =
+                fileId;
+
+        }
+
+
+        if (nameInput) {
+
+            nameInput.value =
+                fileName || "Selected file";
+
+        }
+
+
+        if (emailInput) {
+
+            emailInput.value = "";
+
+        }
+
+
+        if (messageInput) {
+
+            messageInput.value = "";
+
+        }
+
+
+        if (modal) {
+
+            modal.classList.add("show");
+
+        }
+    }
+
+
+    function closeShareModal() {
+
+        const modal =
+            document.getElementById(
+                "shareModal"
+            );
+
+
+        if (modal) {
+
+            modal.classList.remove("show");
+
+        }
+    }
+
+
+    async function submitShare() {
+
+        const fileId =
+            document.getElementById(
+                "shareFileId"
+            )?.value;
+
+
+        const email =
+            document.getElementById(
+                "shareEmailInput"
+            )?.value.trim();
+
+
+        const message =
+            document.getElementById(
+                "shareMessageInput"
+            )?.value.trim();
+
+
+        if (!fileId) {
+
+            showToast(
+                "File information is missing.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        if (!email) {
+
+            showToast(
+                "Enter the user's email address.",
+                "warning"
+            );
+
+            return;
+
+        }
+
+
+        const token =
+            localStorage.getItem("token") ||
+            localStorage.getItem("access_token");
+
+
+        if (!token) {
+
+            showToast(
+                "Your session has expired.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `${window.location.origin}/files/${fileId}/share`,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+
+                            "Authorization":
+                                `Bearer ${token}`
+                        },
+
+                        body: JSON.stringify({
+                            email: email,
+                            message: message
+                        })
+                    }
+                );
+
+
+            const data =
+                await response.json()
+                    .catch(() => ({}));
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.detail ||
+                    "Unable to share file."
+                );
+
+            }
+
+
+            closeShareModal();
+
+
+            showToast(
+                "File shared successfully.",
+                "success"
+            );
+
+
+            if (
+                typeof loadSharedFiles ===
+                "function"
+            ) {
+
+                loadSharedFiles();
+
+            }
+
+
+            if (
+                typeof loadNotifications ===
+                "function"
+            ) {
+
+                loadNotifications();
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Share error:",
+                error
+            );
+
+
+            showToast(
+                error.message ||
+                "Unable to share file.",
+                "error"
+            );
+
+        }
+
+    }
+
+
+    /* =========================================================
+       CONFIRMATION MODAL
+    ========================================================== */
+
+    let confirmCallback = null;
+
+
+    function openConfirmModal(
+        title,
+        message,
+        callback,
+        buttonText = "Confirm"
+    ) {
+
+        const modal =
+            document.getElementById(
+                "confirmModal"
+            );
+
+
+        const titleElement =
+            document.getElementById(
+                "confirmTitle"
+            );
+
+
+        const messageElement =
+            document.getElementById(
+                "confirmMessage"
+            );
+
+
+        const actionButton =
+            document.getElementById(
+                "confirmActionButton"
+            );
+
+
+        titleElement.textContent =
+            title;
+
+
+        messageElement.textContent =
+            message;
+
+
+        actionButton.textContent =
+            buttonText;
+
+
+        confirmCallback =
+            callback;
+
+
+        modal.classList.add("show");
+    }
+
+
+    function closeConfirmModal(confirmed) {
+
+        const modal =
+            document.getElementById(
+                "confirmModal"
+            );
+
+
+        modal.classList.remove("show");
+
+
+        if (
+            confirmed &&
+            typeof confirmCallback ===
+            "function"
+        ) {
+
+            const callback =
+                confirmCallback;
+
+
+            confirmCallback = null;
+
+
+            callback();
+
+        } else {
+
+            confirmCallback = null;
+
+        }
+
+    }
+
+
+    /* =========================================================
+       TOAST
+    ========================================================== */
+
+    function showToast(
+        message,
+        type = "info"
+    ) {
+
+        const container =
+            document.getElementById(
+                "toastContainer"
+            );
+
+
+        if (!container) return;
+
+
+        const toast =
+            document.createElement("div");
+
+
+        toast.className =
+            `toast ${type}`;
+
+
+        let icon = "i";
+
+
+        if (type === "success") {
+            icon = "✓";
+        }
+
+        if (type === "error") {
+            icon = "!";
+        }
+
+        if (type === "warning") {
+            icon = "!";
+        }
+
+
+        toast.innerHTML = `
+
+            <div class="toast-icon">
+                ${icon}
+            </div>
+
+            <div class="toast-message">
+                ${escapeHtmlSafe(message)}
+            </div>
+
+        `;
+
+
+        container.appendChild(toast);
+
+
+        setTimeout(() => {
+
+            toast.style.opacity = "0";
+
+            toast.style.transform =
+                "translateX(15px)";
+
+            toast.style.transition =
+                "0.25s ease";
+
+
+            setTimeout(() => {
+
+                toast.remove();
+
+            }, 250);
+
+        }, 3500);
+
+    }
+
+
+    function escapeHtmlSafe(value) {
+
+        const div =
+            document.createElement("div");
+
+
+        div.textContent =
+            value ?? "";
+
+
+        return div.innerHTML;
+    }
+
+
+    /* =========================================================
+       LOADER
+    ========================================================== */
+
+    function showLoader(message = "Please wait...") {
+
+        const loader =
+            document.getElementById(
+                "globalLoader"
+            );
+
+
+        const loaderMessage =
+            document.getElementById(
+                "loaderMessage"
+            );
+
+
+        if (loaderMessage) {
+
+            loaderMessage.textContent =
+                message;
+
+        }
+
+
+        if (loader) {
+
+            loader.classList.add("show");
+
+        }
+
+    }
+
+
+    function hideLoader() {
+
+        const loader =
+            document.getElementById(
+                "globalLoader"
+            );
+
+
+        if (loader) {
+
+            loader.classList.remove("show");
+
+        }
+
+    }
+
+
+    /* =========================================================
+       INITIALIZATION
+    ========================================================== */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        async function() {
+
+            /* Theme */
+
+            const savedTheme =
+                localStorage.getItem("theme") ||
+                "dark";
+
+
+            setTheme(savedTheme);
+
+
+            /* Authentication */
+
+            const token =
+                localStorage.getItem("token") ||
+                localStorage.getItem("access_token");
+
+
+            if (!token) {
+
+                window.location.href =
+                    "login.html";
+
+                return;
+
+            }
+
+
+            /* Keep both token names synchronized */
+
+            localStorage.setItem(
+                "token",
+                token
+            );
+
+
+            /* Restore active view */
+
+            const activeView =
+                sessionStorage.getItem(
+                    "activeView"
+                ) || "dashboard";
+
+
+            switchView(activeView);
+
+
+            /* Load current user */
+
+            if (
+                typeof loadCurrentUser ===
+                "function"
+            ) {
+
+                try {
+
+                    await loadCurrentUser();
+
+                } catch (error) {
+
+                    console.error(
+                        "User loading error:",
+                        error
+                    );
+
+                }
+
+            }
+
+
+            /* Load dashboard */
+
+            if (
+                typeof loadDashboardData ===
+                "function"
+            ) {
+
+                try {
+
+                    await loadDashboardData();
+
+                } catch (error) {
+
+                    console.error(
+                        "Dashboard loading error:",
+                        error
+                    );
+
+                }
+
+            }
+
+
+            /* Default upload tab */
+
+            setUploadTab("file");
+
+        }
+    );
+
+
+    /* =========================================================
+       CLOSE MODALS WHEN CLICKING OUTSIDE
+    ========================================================== */
+
+    document.addEventListener(
+        "click",
+        function(event) {
+
+            const modalOverlays =
+                document.querySelectorAll(
+                    ".modal-overlay"
+                );
+
+
+            modalOverlays.forEach(modal => {
+
+                if (
+                    event.target === modal
+                ) {
+
+                    modal.classList.remove(
+                        "show"
+                    );
+
+                }
+
+            });
+
+        }
+    );
+
+
+    /* =========================================================
+       ESCAPE KEY
+    ========================================================== */
+
+    document.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key !== "Escape") {
+                return;
+            }
+
+
+            document
+                .querySelectorAll(
+                    ".modal-overlay.show"
+                )
+                .forEach(modal => {
+
+                    modal.classList.remove(
+                        "show"
+                    );
+
+                });
+
+
+            const notificationDropdown =
+                document.getElementById(
+                    "notificationDropdown"
+                );
+
+
+            if (notificationDropdown) {
+
+                notificationDropdown.classList.remove(
+                    "show"
+                );
+
+            }
+
+        }
+    );
+
+
+    /* =========================================================
+       DRAG AND DROP
+    ========================================================== */
+
+    const dropZone =
+        document.getElementById(
+            "uploadDropZone"
+        );
+
+
+    if (dropZone) {
+
+        ["dragenter", "dragover"].forEach(
+            eventName => {
+
+                dropZone.addEventListener(
+                    eventName,
+                    function(event) {
+
+                        event.preventDefault();
+
+                        dropZone.classList.add(
+                            "dragover"
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+        ["dragleave", "drop"].forEach(
+            eventName => {
+
+                dropZone.addEventListener(
+                    eventName,
+                    function(event) {
+
+                        event.preventDefault();
+
+                        dropZone.classList.remove(
+                            "dragover"
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+        dropZone.addEventListener(
+            "drop",
+            function(event) {
+
+                const files =
+                    event.dataTransfer.files;
+
+
+                if (!files || !files.length) {
+                    return;
+                }
+
+
+                const fileInput =
+                    document.getElementById(
+                        "fileInput"
+                    );
+
+
+                if (fileInput) {
+
+                    fileInput.files =
+                        files;
+
+
+                    handleFileSelect({
+                        target: fileInput
+                    });
+
+                }
+
+            }
+        );
+
+    }
+
+</script>
+
+
+<!-- =============================================================
+     PROJECT JAVASCRIPT
+============================================================== -->
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/upload.js"></script>
+
+<script>
+
+function handleLogout() {
+
+    openConfirmModal(
+        "Logout",
+        "Are you sure you want to logout from SnapDrive?",
+        function () {
+
+            localStorage.removeItem("token");
+            localStorage.removeItem("access_token");
+
+            sessionStorage.clear();
+
+            window.location.href = "login.html";
+
+        },
+        "Logout"
+    );
+
+}
+
+</script>
+</body>
+</html>

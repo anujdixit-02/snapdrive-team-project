@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Verify Email - SnapDrive</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            margin-bottom: 15px;
+        }
+
+        #message {
+            margin: 20px 0;
+            line-height: 1.5;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 15px;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            background: #111827;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <h1>SnapDrive</h1>
+
+    <h2>Email Verification</h2>
+
+    <p id="message">
+        Verifying your email...
+    </p>
+
+    <a href="login.html">
+        Go to Login
+    </a>
+
+</div>
+
+<script>
+
+const params = new URLSearchParams(
+    window.location.search
+);
+
+const token = params.get("token");
+
+const message = document.getElementById("message");
+
+if (!token) {
+
+    message.textContent =
+        "Verification token is missing.";
+
+} else {
+
+    fetch(
+        `/auth/verify-email?token=${encodeURIComponent(token)}`
+    )
+    .then(async response => {
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.detail || "Verification failed."
+            );
+        }
+
+        message.textContent =
+            data.message ||
+            "Email verified successfully.";
+
+    })
+    .catch(error => {
+
+        message.textContent =
+            error.message;
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>
